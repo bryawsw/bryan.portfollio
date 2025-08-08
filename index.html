@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,33 +29,8 @@
             background-color: var(--color-bg);
             color: var(--color-text);
             overflow-x: hidden;
-            cursor: none;
         }
         
-        /* Custom cursor styles */
-        #cursor-dot {
-            width: 10px;
-            height: 10px;
-            background-color: white;
-            border-radius: 50%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.1s ease-out, width 0.2s ease, height 0.2s ease;
-        }
-
-        #cursor-dot.grow {
-            width: 30px;
-            height: 30px;
-            background-color: rgba(255, 255, 255, 0.5);
-        }
-
-        a, button {
-            cursor: none;
-        }
-
         .unselectable {
             user-select: none;
             -webkit-user-select: none;
@@ -145,8 +119,6 @@
 </head>
 <body class="antialiased">
 
-    <div id="cursor-dot"></div>
-
     <div class="background-container">
         <canvas id="stars-canvas"></canvas>
     </div>
@@ -214,25 +186,6 @@
     </div>
 
     <script>
-        // --- Custom Cursor Logic ---
-        const cursorDot = document.getElementById('cursor-dot');
-        const interactiveElements = document.querySelectorAll('a, button, model-viewer');
-
-        window.addEventListener('mousemove', e => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            cursorDot.style.transform = `translate(${posX - 5}px, ${posY - 5}px)`;
-        });
-
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorDot.classList.add('grow');
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorDot.classList.remove('grow');
-            });
-        });
-
         // --- 3D Tilt Effect for Cards ---
         const cards = document.querySelectorAll('.glass-card');
         cards.forEach(card => {
