@@ -1,96 +1,342 @@
+Of course. Here is the complete code with the music control panel and all of its related CSS and JavaScript logic fully removed.
+
+HTML
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bryan's Portfolio | 3D Modeler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Define color palette and other variables */
+        :root {
+            --color-bg: #000000;
+            --color-text: #E5E7EB;
+            --color-grid: rgba(255, 255, 255, 0.07);
+            --color-outline: #FFFFFF;
+            --color-card-bg: rgba(17, 24, 39, 0.6);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --discord-blurple: #5865F2;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            cursor: none;
+        }
+        
+        /* Custom cursor styles */
+        #cursor-dot {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s ease-out, width 0.2s ease, height 0.2s ease;
+        }
+
+        #cursor-dot.grow {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        a, button, input[type=range] {
+            cursor: none;
+        }
+
+        .unselectable {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Background container with stars */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: var(--color-bg);
+            background-image:
+                linear-gradient(var(--color-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        #stars-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Upgraded Glassmorphism with 3D tilt effect */
+        .glass-card {
+            background: var(--color-card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+        }
+
+        /* Navigation buttons */
+        .nav-button {
+            background: transparent;
+            border: 2px solid var(--color-outline);
+            color: var(--color-outline);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--color-outline), inset 0 0 5px var(--color-outline);
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        .nav-button:hover {
+            background: var(--color-outline);
+            color: var(--color-bg);
+            box-shadow: 0 0 25px var(--color-outline);
+            transform: scale(1.1);
+            animation: none;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--color-bg); }
+        ::-webkit-scrollbar-thumb { background: #4B5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6B7280; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes text-reveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-reveal {
+            opacity: 0;
+            animation: text-reveal 0.8s ease-out forwards;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px var(--color-outline), inset 0 0 5px var(--color-outline); }
+            50% { box-shadow: 0 0 15px var(--color-outline), inset 0 0 10px var(--color-outline); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="cursor-dot"></div>
+
+    <div class="background-container">
+        <canvas id="stars-canvas"></canvas>
+    </div>
+
+    <nav class="fixed top-0 left-0 right-0 z-50 p-4 flex justify-center gap-4 bg-black/30 backdrop-blur-md">
+        <a href="#about" class="nav-button font-semibold py-2 px-6 rounded-full text-sm">About</a>
+        <a href="#artwork" class="nav-button font-semibold py-2 px-6 rounded-full text-sm">Work</a>
+        <a href="#contact" class="nav-button font-semibold py-2 px-6 rounded-full text-sm">Contact</a>
+    </nav>
+
+    <div class="relative flex flex-col items-center p-4 sm:p-6 lg:p-8" style="perspective: 1000px;">
+        <div class="w-full max-w-4xl mx-auto space-y-16 md:space-y-24 pt-24">
+
+            <header class="text-center">
+                <h1 class="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase animate-reveal" style="animation-delay: 0.2s;">
+                    Bryan's Portfolio
+                </h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-300 font-light unselectable animate-reveal" style="animation-delay: 0.4s;">
+                    14-Year-Old 3D Modeler
+                </p>
+            </header>
+
+            <section id="about" class="glass-card p-6 md:p-8 shadow-2xl animate-reveal" style="animation-delay: 0.6s;">
+                <h2 class="text-3xl font-bold text-white mb-4 border-b-2 border-gray-700 pb-2 unselectable">About Me</h2>
+                <p class="text-gray-300 leading-relaxed unselectable">
+                    I'm a <strong>3D Modeler</strong> with <strong>3 years of experience</strong>, specializing in creating custom models in any style. Whether you need assets for a game or a model from a reference image, I can bring your ideas to life.
+                </p>
+                <div class="mt-6 p-4 bg-gray-900/50 rounded-lg border border-gray-700 unselectable">
+                    <p class="text-sm text-gray-400"><strong class="text-white">Time Zone:</strong> United Kingdom (GMT+1 / British Summer Time)</p>
+                </div>
+            </section>
+            
+            <section id="artwork" class="glass-card p-6 md:p-8 shadow-2xl text-center animate-reveal" style="animation-delay: 0.8s;">
+                <h2 class="text-3xl font-bold text-white mb-4 border-b-2 border-gray-700 pb-2 unselectable">My Work</h2>
+                <p class="text-gray-300 leading-relaxed mb-6 unselectable">
+                    Join the Discord Server so you can View my Work So Far!
+                </p>
+                <a href="https://discord.gg/R7N7qjUXNJ" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center justify-center px-8 py-4 text-white font-semibold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 transform hover:scale-105"
+                   style="background-color: var(--discord-blurple); --tw-shadow-color: var(--discord-blurple); box-shadow: 0 0 15px var(--tw-shadow-color);">
+                    <span>Join the Server</span>
+                </a>
+            </section>
+
+
+            <section id="contact" class="text-center pb-16 animate-reveal" style="animation-delay: 1.0s;">
+                <h2 class="text-3xl font-bold text-white mb-4 unselectable">Let's Connect</h2>
+                <p class="text-gray-300 mb-6 max-w-md mx-auto unselectable">
+                    Have a project in mind or want to chat? Find me on Discord or Roblox.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://discord.com/users/1293241571009101987" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 text-white font-semibold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 transform hover:scale-105"
+                       style="background-color: var(--discord-blurple); --tw-shadow-color: var(--discord-blurple); box-shadow: 0 0 15px var(--tw-shadow-color);">
+                        <span>imlegitbryan on Discord</span>
+                    </a>
+                    <a href="https://www.roblox.com/users/8995560817/profile" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-gray-700 text-white font-semibold rounded-lg shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-gray-500 transition-all duration-300 transform hover:scale-105">
+                        <span>Roblox Profile</span>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Custom Cursor Logic ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const interactiveElements = document.querySelectorAll('a, button, model-viewer, input[type=range]');
+
+        window.addEventListener('mousemove', e => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.transform = `translate(${posX - 5}px, ${posY - 5}px)`;
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorDot.classList.add('grow');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorDot.classList.remove('grow');
+            });
+        });
+
+        // --- 3D Tilt Effect for Cards ---
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                const rotateX = -y / 20;
+                const rotateY = x / 20;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0) rotateY(0)';
+            });
+        });
+
+        // --- Shooting Stars Animation ---
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let stars = [];
+        const numStars = 300; 
+
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speed = Math.random() * 1 + 0.2;
+                this.alpha = Math.random() * 0.5 + 0.2;
+                this.isShooting = false;
+
+                if (Math.random() > 0.99) {
+                    this.isShooting = true;
+                    this.shootingSpeedX = (Math.random() - 0.5) * 15 + 5;
+                    this.shootingSpeedY = (Math.random() - 0.5) * 15 + 5;
+                    this.alpha = 1;
+                    this.size = 2;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`; 
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+                ctx.fill();
+                ctx.shadowBlur = 0; 
+            }
+
+            update() {
+                if (this.isShooting) {
+                    this.x += this.shootingSpeedX;
+                    this.y += this.shootingSpeedY;
+                    this.alpha -= 0.025;
+                    if (this.alpha <= 0) {
+                        this.reset();
+                    }
+                } else {
+                    this.y += this.speed;
+                    if (this.y > canvas.height) {
+                        this.y = 0;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+            }
+        }
+
+        function init() {
+            setCanvasSize();
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        animate();
+    </script>
+</body>
 </html>
